@@ -48,12 +48,14 @@ def get_records_index():
 def find_file_id(record_id: str, ext: str):
     filename = f"{record_id}.{ext}"
     query = f"name = '{filename}' and '{FOLDER_ID}' in parents and trashed = false"
+    print(query)
     results = drive_service.files().list(
         q=query,
         spaces='drive',
         fields="files(id, name)",
         pageSize=1
     ).execute()
+    print(results)
     files = results.get('files', [])
     if files:
         return files[0]['id']
@@ -63,11 +65,14 @@ def find_file_id(record_id: str, ext: str):
 # --- Endpoint: descargar archivo como stream ---
 @app.get("/record/{record_id}/{ext}")
 def get_record_file(record_id: str, ext: str):
+    print(f"[REQUEST] Obteniendo archivo: {record_id}.{ext}")
     if ext not in ["hea", "mat"]:
+        print(f"[ERROR] Extensión inválida: {ext}")
         raise HTTPException(status_code=400, detail="Extensión no válida")
 
     file_id = find_file_id(record_id, ext)
     if not file_id:
+        print(f"[ERROR] Archivo no encontrado: {record_id}.{ext}")
         raise HTTPException(status_code=404, detail="Archivo no encontrado")
 
     request = drive_service.files().get_media(fileId=file_id)
