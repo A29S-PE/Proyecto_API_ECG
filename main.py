@@ -9,7 +9,7 @@ import json
 
 # --- Configuración ---
 FOLDER_ID = "1i_L7rPHuCHDt2heyeeKhTJA7wdz9-LOQ"          # <-- Cambia por tu carpeta en Google Drive
-INDEX_FILE_ID = "1YSHcmYipoYfb4Wv7CnzaV2uiqF9tG9A7"         # <-- Cambia por tu archivo records_index.json en Drive
+INDEX_FILE_ID = "1cfG6JUdAZ3SknBu-SG2shsiB5cvdxQAK"         # <-- Cambia por tu archivo records_index.json en Drive
 
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
@@ -47,7 +47,7 @@ def get_records_index():
 # --- Función auxiliar para buscar archivo por nombre ---
 def find_file_id(record_id: str, ext: str):
     filename = f"{record_id}.{ext}"
-    query = f"name = '{filename}' and '{FOLDER_ID}' in parents and trashed = false"
+    query = f"name = '{filename}' and trashed = false"
     print(query)
     results = drive_service.files().list(
         q=query,
